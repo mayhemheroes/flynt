@@ -4,7 +4,7 @@ import sys
 import fuzz_helpers
 
 
-with atheris.instrument_imports():
+with atheris.instrument_imports(include=['flynt']):
     from flynt.lexer import split
     from flynt.static_join.transformer import transform_join
     from flynt.string_concat.transformer import transform_concat
@@ -25,7 +25,7 @@ def TestOneInput(data):
     except (ValueError):
         return -1
     except (SyntaxError, TypeError):
-        if ctr > 10000:
+        if ctr > 100:
             raise
         return -1
 
