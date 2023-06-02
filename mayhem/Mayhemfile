@@ -1,0 +1,8 @@
+project: flynt
+target: fuzz-flynt
+testsuite:
+    - file://mayhem/testsuite
+
+cmds:
+  - cmd: /src/mayhem/fuzz_flynt.py
+    libfuzzer: true
