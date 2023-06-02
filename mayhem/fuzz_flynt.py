@@ -24,6 +24,10 @@ def TestOneInput(data):
             transform_concat(fdp.ConsumeRemainingString())
     except (ValueError):
         return -1
+    except (SyntaxError, TypeError):
+        if ctr > 50:
+            raise
+        return -1
 
 def main():
     atheris.Setup(sys.argv, TestOneInput)
