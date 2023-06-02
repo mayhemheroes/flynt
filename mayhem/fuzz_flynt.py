@@ -7,10 +7,14 @@ import fuzz_helpers
 with atheris.instrument_imports():
     from flynt.lexer import split
     from flynt.static_join.transformer import transform_join
-    from flynt.string_concat.transformer import transform_concat, unpack_binop
+    from flynt.string_concat.transformer import transform_concat
+
+ctr = 0
 def TestOneInput(data):
     fdp = fuzz_helpers.EnhancedFuzzedDataProvider(data)
     choice = fdp.ConsumeIntInRange(0, 2)
+    global ctr
+    ctr += 1
     try:
         if choice == 0:
             split.get_fstringify_chunks(fdp.ConsumeRemainingString())
@@ -18,7 +22,11 @@ def TestOneInput(data):
             transform_join(fdp.ConsumeRemainingString())
         elif choice == 2:
             transform_concat(fdp.ConsumeRemainingString())
-    except (ValueError, SyntaxError):
+    except (ValueError):
+        return -1
+    except (SyntaxError, TypeError):
+        if ctr > 10000:
+            raise
         return -1
 
 def main():
